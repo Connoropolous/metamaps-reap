@@ -1,13 +1,12 @@
 <% content_for :title, "My Maps" %>
  
-<div data-role="content">
-    <% if @maps.length > 0 %>  
-    <ul data-role="listview" data-inset="true" data-filter="true">
-      <% @maps.each do |m| %>
-        <li><a href="/maps/<%= m.id %>"><img class="ui-li-icon" src="/assets/map.png" width="30" /><%= m.name %></a></li>
-      <% end %>
-    </ul>
-    <% else %>
-    There are no metamaps yet.
+
+  <% if @maps.length > 0 %>  
+  <ul data-role="listview" data-inset="true" data-filter="true">
+    <% @maps.each do |m| %>
+      <li><a href="/maps/<%= m.id %>"><img class="ui-li-icon" src="/assets/map.png" width="30" /><%= m.name %></a></li>
     <% end %>
-</div><!-- /content -->
+  </ul>
+  <% else %>
+  There are no metamaps yet.
+  <% end %>

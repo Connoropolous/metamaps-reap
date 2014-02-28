@@ -1,4 +1,7 @@
-<% content_for :title, @topic.name %>
+<% content_for :title, "Topic " + @topic.id.to_s %>
+ 
+  <h4>Name</h4>
+  <p><%= @topic.name %></p>
  
   <h4>Type</h4>
   <p><img class="ui-li-icon" src="/assets/<%= @topic.metacode.icon %>" width="30" />&nbsp;<%= @topic.metacode.name %></p>

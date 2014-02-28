@@ -1,5 +1,8 @@
-<% content_for :title, @map.name %>
+<% content_for :title, "Map " + @map.id.to_s %>
  
+  <h4>Name</h4>
+  <p><%= @map.name %></p>
+    
   <% if !@map.desc.empty? %>
     <h4>Description</h4>
     <p><%= @map.desc %></p>
