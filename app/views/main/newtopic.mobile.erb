@@ -1,0 +1,45 @@
+<%#
+  # @file
+  # Located at /newtopic
+  # 
+  #%>
+  
+<% content_for :title, "New Topic" %>  
+
+<div data-role="page" id="new-entity" class="new-entity-form">
+  <div data-role="header" data-theme="c">
+    <h1>New Topic</h1>
+  </div>
+
+  <div data-role="content">
+    <form method="post" action="">
+      <div data-role="fieldcontain">
+        <label for="title">Title</label>
+        <input id="title" type="text" name="title">
+      </div>
+      <div data-role="fieldcontain">
+        <label for="type">Type</label>
+        <select multiple="multiple" id="type">
+          <% Metacode.all.each do |m| %>
+          <option value="<%= m.id.to_s %>"><%= m.name %></option>
+          <% end %>
+        </select>
+      </div>
+      <div data-role="fieldcontain">
+        <label for="description">Description</label>
+        <textarea name="description" id="description"></textarea>
+      </div>
+      <div data-role="fieldcontain">      
+        <label for="addToMaps">Add To Maps</label>
+        <select multiple="multiple" id="addToMaps">
+          <% @maps.each do |m| %>
+          <option value="<%= m.id.to_s %>"><%= m.name %></option>
+          <% end %>
+        </select>
+      </div>
+      <a href="#" class="backToList" data-role="button" data-inline="true" data-transition="slidedown">Cancel</a>
+      <a href="#" class="addIt" data-role="button" data-inline="true" data-transition="slidedown">Create!</a>
+    </form>
+  </div>
+</div>
+

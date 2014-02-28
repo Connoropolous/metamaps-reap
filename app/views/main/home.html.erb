@@ -1,0 +1,80 @@
+<%#
+  # @file
+  # Located at /
+  # Shows 3 most recently created topics, synapses, and maps.
+  #%>
+  
+<% content_for :title, "Home | Metamaps" %>   
+  
+  
+<div id="preloaded-images">
+   <img src="/assets/metacodes75ms300x300.gif" width="128 height="128" alt="Image 01" />
+</div>  
+  
+<div class="home_bg">
+
+<div class="home_content">
+<div class="home_desc">
+  <div class="welcomeTo">Welcome to IdeaWall</div>
+  <img id="homeMapImage" src="/assets/metamap128x128.png" width="128" height="128" />
+  <div class="metamapsIs">
+    a home on the web for <span class="swapWord">
+      <ul class="texts">
+      <li>building shared knowledge</li>
+      <li>learning</li>
+      <li>visioning</li>
+      <li>conversing</li>
+      <li>collaborating</li>
+      <li>sensemaking</li>
+      <li>innovating</li>
+      <li>designing</li>
+      <li>playing</li>
+      <li>exploring</li>
+      </ul>
+    </span>
+  </div>
+</div>
+<div class="clearfloat"></div>
+
+<p class="contact">
+  <a href="#" class="learnmore button openLightbox" data-open="about">Learn More</a>
+  <div class="featuredMaps">explore recent maps</div>
+</p>
+
+<div class="centeredProfile">
+  <div id="homeMap">
+    <figure id="homeFigure">
+    <% @maps.each_with_index do |map, index| %>
+      <% first = index == 0 ? true : false %>
+      <%= render :partial => 'maps/homemap', :locals => { :map => map, :first => first } %>
+    <% end %>
+    </figure>
+  </div>
+</div>
+</div>
+<div class="clearfloat"></div>
+
+</div>
+
+
+<script>
+
+$(document).ready(function() {
+  // flip through these words on the homepage
+  $('.swapWord').textillate({ 
+       in: { effect: 'fadeIn', delay: 20 },
+       out: { effect: 'fadeOut', sync: true }, 
+       loop: true,
+       minDisplayTime: 2000
+  });
+  
+  $('#homeMapImage').hover(function() {
+    $(this).attr('src','/assets/metacodes75ms300x300.gif');
+  }, function() {
+    $(this).attr('src','/assets/metamap128x128.png');
+  });
+
+});
+
+
+</script>

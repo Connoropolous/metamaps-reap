@@ -1,0 +1,61 @@
+<%#
+  # @file
+  # 
+  #%>
+
+
+<div id="lightbox_overlay">
+  <div id="lightbox_main">
+    <a id="lightbox_close" onclick="cancelMapCreate('fork_map');cancelMapCreate('new_map');return false;" href="#"></a>
+    <div id="lightbox_content">
+      
+      <div class="lightboxContent" id="about">
+        <h3>About IdeaWall</h3>
+        
+        <p>Metamaps.cc is a free and open source web platform for changemakers, innovators, educators and students. It enables individuals and communities to build and visualize their shared knowledge and unlock their collective intelligence.</p>
+        <p>We're creating tools to help connect people, resources and ideas with rich detail and weave those relationships into actionable insights and stories. The platform is evolving for a range of applications amidst a growing network of designers, developers, practitioners, entrepreneurs, and artists.</p>
+        
+        <ul>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="http://metamaps.cc" target="_blank">check out Metamaps.cc</a></li>
+        </ul>
+        <div class="clearfloat"></div>
+      </div>
+      
+      <div class="lightboxContent" id="tutorial">
+        <h3>Tutorial</h3>
+        <div>Coming soon...</div>
+        <!--<iframe width="510" height="383" src="//www.youtube.com/embed/0Bd8XxlNG3U?rel=0" frameborder="0" allowfullscreen></iframe>-->
+      </div>
+      
+      <div class="lightboxContent" id="cheatsheet">
+        <%= render :partial => 'layouts/cheatsheet' %>
+      </div>
+      
+      <% if authenticated? %>
+        <div class="lightboxContent" id="invite">
+          <h3>Send Invites</h3>
+          <p>You can invite others to the IdeaWall platform. Send them this link</p>
+          <p class="green">http://reap.herokuapp.com/users/sign_up</p>
+          <p>and give them the access code shown below.</p>
+          <% mapper = current_user %>
+          <p class="green"><%= mapper.code %></p>
+        </div>
+      
+        <% # this is the create new map form %>
+        <div class="lightboxContent" id="newmap">  
+          <%= render :partial => 'maps/new' %>
+        </div>
+      
+        <% if (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
+        <div class="lightboxContent" id="forkmap">  
+          <%= render :partial => 'maps/fork' %>
+        </div>
+        <% end %>
+      <% end %>
+      
+    </div>
+  </div>
+  <div id="lightbox_screen" onclick="cancelMapCreate('fork_map');cancelMapCreate('new_map');return false;" style="height: 100%;"></div>
+</div>
+

@@ -1,0 +1,73 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+
+ *= require_self
+ *= require jquery.mobile-1.3.2.min
+ *= require jquery.mobile.theme-1.3.2.min
+ *= require jquery.mobile.structure-1.3.2.min
+
+*/
+
+.ui-listview .ui-li-icon {
+    max-height: 30px !important;
+    max-width: 30px !important;
+    left: 5px !important;
+    top: .4em !important;
+}
+
+.nav-veqtor .ui-btn .ui-btn-inner {
+    padding-top: 40px !important; 
+}
+.nav-veqtor .ui-btn .ui-icon { 
+    width: 45px!important; 
+    height: 35px!important; 
+    margin-left: -24px !important; 
+    box-shadow: none!important; 
+    -moz-box-shadow: none!important; 
+    -webkit-box-shadow: none!important;
+    -webkit-border-radius: none !important;
+    border-radius: none !important; 
+}
+
+.ui-icon-Star { 
+background: url('Star grey-01.png') !important;
+background-repeat: no-repeat !important;
+background-size: 35px 35px !important;
+background-position: 6px !important;
+}
+
+.ui-icon-Map { 
+background: url('Map grey-01.png') !important;
+background-repeat: no-repeat !important;
+background-size: 35px 35px !important;
+background-position: 6px !important; 
+}
+
+.ui-icon-Add { 
+background: url('Add grey-01.png') !important;
+background-repeat: no-repeat !important;
+background-size: 35px 35px !important;
+background-position: 6px !important;
+}
+
+.ui-icon-Flag { 
+background: url('Flag grey-01.png') !important;
+background-repeat: no-repeat !important;
+background-size: 35px 35px !important;
+background-position: 6px !important; 
+}
+
+.ui-icon-Lock { 
+background: url('Lock grey-01.png') !important;
+background-repeat: no-repeat !important;
+background-size: 35px 35px !important;
+background-position: 6px !important;
+}

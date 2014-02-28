@@ -1,0 +1,11 @@
+#password: toolsplusconsciousness
+
+connor:
+  name: Connor Turland
+  email: connorturland@gmail.com
+  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
+
+ishan:
+  name: Ishan Shapiro
+  email: ishanshapiro@gmail.com
+  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW

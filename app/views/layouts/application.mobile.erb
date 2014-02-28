@@ -1,0 +1,176 @@
+<%#
+  # @file
+  # Main application file. Holds scaffolding present on every page.
+  # Then a certain non-partial view (no _ preceding filename) will be
+  # displayed within, based on URL
+  #%>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%=h yield(:title) + "" %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript">
+  <% if authenticated? %>
+    var userid = <%= user.id %>;
+    var username = "<%= user.name %>";
+  <% else %>
+    var userid = null,username = null;
+  <% end %>
+  </script>
+  <%= stylesheet_link_tag    "application.mobile", :media => "all" %>
+  <%= javascript_include_tag "application.mobile" %>
+  <script type="text/javascript" src="//use.typekit.net/obp7wss.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+     <% if action_name == "newtopic" %>
+       <%= yield %>
+     <% else %>
+     <div data-role="page" >
+ 
+        <div data-role="header" data-theme="c">
+            <h1><%=h yield(:title) %></h1>
+        </div><!-- /header -->
+ 
+        <div data-role="content">
+            <%= yield %>
+        </div><!-- /content -->
+ 
+        <div data-role="footer" data-position="fixed" data-theme="c">
+            <% if authenticated? %>
+            <div data-role="navbar" class="nav-veqtor">  
+              <ul>  
+                <li><a href="/maps/mappers/<%= user.id %>?format=mobile" data-icon="Map">My Maps</a></li>
+                <li><a href="/newtopic?format=mobile" id="createNewEntity" data-icon="Add" data-transition="slideup" data-prefetch="true">New Topic</a></li>
+                <li><a href="/users/logout" data-icon="Lock" data-method="delete">Logout</a></li>
+              </ul>  
+            </div>
+            <% else %>
+            <h4>IdeaWall</h4>
+            <% end %>
+        </div><!-- /footer -->
+ 
+    </div><!-- /page -->
+    <% end %>
+    
+<% if authenticated? %>
+<script>
+$('#new-entity').live('pagecreate',function(){
+// create Entity
+function createE(callback, args) {
+    return $.post("/entities.json", (function (data) { 
+      args.unshift(data);
+      callback.apply(null, args); 
+    }));
+}
+
+// create Field
+function createF(EntityFieldSynapse, efsID, keyID, value) {
+        var data, metadata;
+
+        data = {};
+        metadata = {};
+        if (EntityFieldSynapse === "entity") {
+            metadata["entity_id"] = efsID;
+        } else if (EntityFieldSynapse === "field") {
+            metadata["field_id"] = efsID;
+        } else if (EntityFieldSynapse === "synapse") {
+            metadata["synapse_id"] = efsID;
+        }
+        metadata["key_id"] = keyID;
+        metadata["value"] = value;
+        data["field"] = metadata;
+        return $.ajax({
+            type: "POST",
+            url: "/fields.json",
+            data: data,
+            success: (function (data, textStatus, jqXHR) {
+            }),
+            async: false
+        });
+} 
+
+// create Synapse
+function createS(entity1_id, relationID, entity2_id) {
+        var data, metadata;
+
+        data = {};
+        metadata = {};
+        metadata["entity1_id"] = entity1_id;
+        metadata["relation_id"] = relationID;
+        metadata["entity2_id"] = entity2_id;
+        data["synapse"] = metadata;
+        return $.ajax({
+            type: "POST",
+            url: "/synapses.json",
+            data: data,
+            success: (function (data, textStatus, jqXHR) {
+            }),
+            async: false
+        });
+}
+    
+    // add events to the back and submit buttons
+    // this is the back button
+    $('#new-entity').find('.backToList').click(function(evt){
+      evt.preventDefault();
+      evt.stopPropagation();
+      $('#new-entity form')[0].reset();
+      if ($.mobile.urlHistory.getPrev() != undefined) {
+        $.mobile.changePage($.mobile.urlHistory.getPrev().url, { transition: 'slidedown' });
+      } else {
+        $.mobile.changePage( '/maps/mappers/' + userid.toString() + '?format=mobile', { transition: 'slidedown' });
+      }
+    });
+
+    // add the events for the submit button
+    $('#new-entity').find('.addIt').click(function(evt){
+        console.log(evt);
+        evt.preventDefault();
+        evt.stopPropagation();
+        
+        if ($('#title').val() == "" || $('#type option:selected').length == 0) {
+          alert('Please enter at least a title and select one type');
+          return;
+        }
+        // change the button to a loading image
+        $('#new-entity').find('.addIt .ui-btn-text').html('<img src="/assets/loading.gif" />');
+        function addMetadata(e){
+          // add the 'expressed In English' field
+          createF("entity",e.id, 1, $('#title').val());
+          // add the 'type' synapses
+          $('#type option:selected').each(function() {
+            createS(e.id, 2, $(this).val());
+          });
+          // add the 'Description' field
+          createF("entity",e.id, 20, $('#description').val());
+          // add the 'appears as topic on map' synapses
+          $('#addToMaps option:selected').each(function() {
+            createS(e.id, 14, $(this).val());
+          });
+          
+          // reset the form and change the button back to say "Submit"
+          $('#new-entity form')[0].reset();
+          $('#new-entity').find('.addIt .ui-btn-text').text("Created!");
+          setTimeout(function(){
+            $('#new-entity').find('.addIt .ui-btn-text').text("Create!");
+            if ($.mobile.urlHistory.getPrev() != undefined) {
+              $.mobile.changePage($.mobile.urlHistory.getPrev().url, { transition: 'slidedown' });
+            } else {
+              $.mobile.changePage( '/dashboard', { transition: 'slidedown' });
+            }
+          }, 1000);
+        }
+        // call create entity which will run 'addMetadata' when it works
+        createE(addMetadata, []);
+    }); // end $('.addIt').click
+});
+</script>
+<% end %>
+
+</body>
+</html>

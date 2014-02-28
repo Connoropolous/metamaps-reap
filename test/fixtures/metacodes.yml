@@ -1,0 +1,73 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: 
+  name: Automation
+  icon: icons/WHITE_AUTOMATED.png
+
+two: 
+  name: Blank Database
+  icon: icons/WHITE_BLANK_DATABASE.png
+
+three: 
+  name: Contact Email
+  icon: icons/WHITE_CONTACT_EMAIL.png
+
+four: 
+  name: Contact
+  icon: icons/WHITE_CONTACT.png
+
+five: 
+  name: CRM
+  icon: icons/WHITE_CRM.png
+
+six: 
+  name: Database
+  icon: icons/WHITE_DATABASE.png
+
+seven: 
+  name: Decision Rule
+  icon: icons/WHITE_DECISION_RULE.png
+
+eight:
+  name: Eloqua Database
+  icon: icons/WHITE_ELOQUA_DATABASE.png
+
+nine:
+  name: Eloqua
+  icon: icons/WHITE_ELOQUA.png
+
+ten:
+  name: Form
+  icon: icons/WHITE_FORM.png
+
+eleven:
+  name: User  
+  icon: icons/WHITE_USER.png
+
+twelve:
+  name: Email
+  icon: icons/WHITE_MAIL-02.png
+
+thirteen:
+  name: Direct Mail
+  icon: icons/WHITE_MAIL-14.png
+
+fourteen:
+  name: Map
+  icon: icons/WHITE_MAP.png
+
+fifteen:
+  name: Mobile
+  icon: icons/WHITE_MOBILE.png
+
+sixteen:
+  name: QR Code
+  icon: icons/WHITE_QR_CODE.png
+
+seventeen:
+  name: Website
+  icon: icons/WHITE_WEBSITE.png
