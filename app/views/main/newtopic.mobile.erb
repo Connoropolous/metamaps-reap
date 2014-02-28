@@ -19,7 +19,7 @@
       </div>
       <div data-role="fieldcontain">
         <label for="type">Type</label>
-        <select multiple="multiple" id="type">
+        <select id="type">
           <% Metacode.all.each do |m| %>
           <option value="<%= m.id.to_s %>"><%= m.name %></option>
           <% end %>
