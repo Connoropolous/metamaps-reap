@@ -18,8 +18,7 @@ has_many :mappings
   validates_uniqueness_of :name # done by devise
   validates_uniqueness_of :email # done by devise
   if Object.const_defined?('User') 
-    #codes = User.all.map(&:code)
-    codes = []
+    codes = User.all.map(&:code)
   else
     codes = []
   end
