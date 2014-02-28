@@ -1,0 +1,15 @@
+<% content_for :title, @topic.name %>
+ 
+<div data-role="content">
+    <% if @topic.maps.length > 0 %>  
+    <ul data-role="listview" data-inset="true" data-filter="true">
+      <% @topic.maps.each do |m| %>
+        <% if m.authorize_to_view(@user) %>
+          <li><a href="/maps/<%= m.id %>"><img class="ui-li-icon" src="/assets/map.png" width="30" /><%= m.name %></a></li>
+        <% end %> 
+      <% end %>
+    </ul>
+    <% else %>
+    Appears on 0 maps.
+    <% end %>
+</div><!-- /content -->

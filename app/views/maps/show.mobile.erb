@@ -1,0 +1,15 @@
+<% content_for :title, @map.name %>
+ 
+<div data-role="content">
+    <% if @map.topics.length > 0 %>  
+    <ul data-role="listview" data-inset="true" data-filter="true">
+      <% @map.topics.each do |t| %>
+        <% if t.authorize_to_view(@user) %>
+          <li><a href="/topics/<%= t.id %>"><img class="ui-li-icon" src="/assets/<%= t.metacode.icon %>" width="30" /><%= t.name %></a></li>
+        <% end %> 
+      <% end %>
+    </ul>
+    <% else %>
+    There are no topics yet.
+    <% end %>
+</div><!-- /content -->

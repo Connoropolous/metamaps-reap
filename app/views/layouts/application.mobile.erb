@@ -44,9 +44,9 @@
             <% if authenticated? %>
             <div data-role="navbar" class="nav-veqtor">  
               <ul>  
-                <li><a href="/maps/mappers/<%= user.id %>?format=mobile" data-icon="Map">My Maps</a></li>
-                <li><a href="/newtopic?format=mobile" id="createNewEntity" data-icon="Add" data-transition="slideup" data-prefetch="true">New Topic</a></li>
-                <li><a href="/users/logout" data-icon="Lock" data-method="delete">Logout</a></li>
+                <li><a href="/maps/mappers/<%= user.id %>" data-icon="Map">My Maps</a></li>
+                <li><a href="/newtopic" id="createNewEntity" data-icon="Add" data-transition="slideup" data-prefetch="true">New Topic</a></li>
+                <li><a href="/sign_out" data-icon="Lock">Logout</a></li>
               </ul>  
             </div>
             <% else %>
@@ -123,7 +123,7 @@ function createS(entity1_id, relationID, entity2_id) {
       if ($.mobile.urlHistory.getPrev() != undefined) {
         $.mobile.changePage($.mobile.urlHistory.getPrev().url, { transition: 'slidedown' });
       } else {
-        $.mobile.changePage( '/maps/mappers/' + userid.toString() + '?format=mobile', { transition: 'slidedown' });
+        $.mobile.changePage( '/maps/mappers/' + userid.toString(), { transition: 'slidedown' });
       }
     });
 

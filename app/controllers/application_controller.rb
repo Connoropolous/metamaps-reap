@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   
   # If you do not want to set the format to :mobile or :tablet and only use the helper functions, pass false as an argument.
   has_mobile_fu
+  before_filter :set_request_format
   
   # this is for global login
   include ContentHelper
@@ -23,8 +24,16 @@ class ApplicationController < ActionController::Base
     session[:previous_url] || root_path
   end
   
+  def after_sign_out_path_for(resource)
+    root_path
+  end
+  
   def after_sign_up_path_for(resource)
     root_path
+  end
+  
+  def set_request_format
+    request.format = :mobile if is_mobile_device?
   end
   
 private
