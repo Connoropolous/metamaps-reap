@@ -31,7 +31,7 @@ function graphSettings(type, embed) {
     },
     Edge: {
        overridable: true,
-       color: '#222222',
+       color: '#000',
        type: 'customEdge',
        lineWidth: 2,
        alpha: 0.4
@@ -274,7 +274,7 @@ var nodeSettings = {
 			  if (whiteCircle) {
 				  ctx.beginPath();
 				  ctx.arc(pos.x, pos.y, dim+20, 0, 2 * Math.PI, false);
-          if (! MetamapsModel.embed) ctx.strokeStyle = '#999';
+          if (! MetamapsModel.embed) ctx.strokeStyle = '#FFF';
           if (MetamapsModel.embed) ctx.strokeStyle = '#999';
 				  ctx.lineWidth = 2;
 				  ctx.stroke();
@@ -335,7 +335,7 @@ var nodeSettings = {
             //now adjust the label placement 
             var ctx = canvas.getCtx();
             ctx.font = 'bold 14px arial';
-            ctx.fillStyle = '#999';
+            ctx.fillStyle = '#FFF';
             ctx.textBaseline = 'hanging';
             
             // helper function to determine how many lines are needed

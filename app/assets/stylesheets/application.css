@@ -116,7 +116,7 @@ html {
 }
 
 body {
-  background: url(geometry.png);
+  background: #646464;
   
   font-family: 'LatoLight', helvetica, sans-serif;
   color:#FFF;
@@ -829,7 +829,7 @@ cursor:pointer;
   */
   height:auto;
   width:260px;
-  background: #000;
+  background: #838383;
   padding: 10px;
   border: 1px solid black;
   font-family: 'LatoLight', helvetica, sans-serif;
@@ -862,14 +862,15 @@ cursor: pointer;
   width:61px;
   height:70px;
   cursor:pointer;
+  padding: 2px 0 5px;
 }
 .sidebarFilterBox li:hover {
-background-color: rgba(255,255,255,0.1);
+background-color: rgba(255,255,255,0.5);
 }
 .sidebarFilterBox li img {
   width:45px;
   height:45px;
-  margin:0 auto;
+  margin: 0 auto 6px;
 }
 .sidebarFilterBox li p {
   font-size:11px;
@@ -1085,7 +1086,7 @@ min-width: 440px;
 }
 
 .sidebarSearch .resultText {
-  width: 250px;
+  width: 240px;
   display: block;
   float: left;
 }
@@ -1748,7 +1749,7 @@ border: solid 2px #000;
 }
 
 #lightbox_content {
-  background: white url(metacode-watermark.png) 443px -30px no-repeat;
+  background: white;
   padding: 20px;
   border-radius:5px;
 }
