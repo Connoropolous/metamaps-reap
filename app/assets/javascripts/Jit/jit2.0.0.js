@@ -7262,7 +7262,7 @@ Graph.Label.Native = new Class({
               ctx.lineTo(x, y + radius);
               ctx.quadraticCurveTo(x, y, x + radius, y);
               ctx.closePath();
-              ctx.stroke();
+              //ctx.stroke();
               ctx.fill();
        
        ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');

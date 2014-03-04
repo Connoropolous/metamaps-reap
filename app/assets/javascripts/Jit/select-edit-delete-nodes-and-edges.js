@@ -365,7 +365,7 @@ function selectEdge(edge) {
   if ( ! MetamapsModel.embed) {
     edge.setDataset('end', {
       lineWidth: 4,
-      color: '#FFFFFF',
+      color: '#999',
       alpha: 1
     });
   } else if (MetamapsModel.embed) {

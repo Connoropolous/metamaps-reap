@@ -24,6 +24,7 @@
  *= require users
 */
 
+
 @font-face {
     font-family: 'LatoLight';
     src: url('/assets/Fonts/Lato-Lig-webfont.eot');
@@ -252,6 +253,7 @@ button.button:hover, a.button:hover, input[type="submit"]:hover {
   padding: 20px;
   border-radius: 5px;
   color: #000;
+  border:1px solid #000;
   box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
 }
 
@@ -266,6 +268,7 @@ button.button:hover, a.button:hover, input[type="submit"]:hover {
   padding: 20px;
   border-radius: 15px;
   color: #000;
+  border:2px solid #000;
 }
 
 
@@ -319,11 +322,12 @@ font-family: 'LatoLight';
 }
 
 #metacodeImgTitle {
-  color:#000;
+  color:#FFF;
   float:left;
   width:120px;
   text-align:center;
   margin-left:90px;
+  font-family: 'LatoRegular';
 }
 
 /* synapse autocomplete */
@@ -336,10 +340,10 @@ margin: 0;
 padding: 5px 5px;
 border: 1px solid black;
 outline: none;
-font-size: 25px;
+font-size: 18px;
 line-height: 35px;
-color: rgba(255,255,255,0.7);
-font-family: 'LatoLight';
+color: white;
+font-family: 'LatoRegular';
 }
 
 .new_synapse #synapse_desc, .new_synapse .tt-hint {
@@ -350,10 +354,10 @@ margin: 0;
 padding: 5px 5px;
 border: 1px solid black;
 outline: none;
-font-size: 18px;
+font-size: 16px;
 line-height: 20px;
 color: rgba(255,255,255,0.7);
-font-family: 'LatoLight';
+font-family: 'LatoRegular';
 }
 
 label, select, input, textarea {
@@ -422,6 +426,7 @@ margin: 5px 0 0 45px;
 background: #0F1519;
 padding: 10px 10px 9px 10px;
 border-radius: 5px;
+z-index: 1;
 }
 
 .headertop {
@@ -971,18 +976,17 @@ cursor:pointer;
   margin: 0;
   border: 0;
   outline: none;
-  font-size: 25px;
+  font-size: 18px;
   line-height:35px;
   background:#0F1519;
   color: rgba(255,255,255,0.6);
-  font-family: 'LatoLight';
+  font-family: 'LatoRegular';
 }
 
 .sidebarSearch .tt-dropdown-menu {
 left:-35px !important;
 background: #0F1519;
 min-width: 440px;
-border: 1px solid black;
 }
 
 .sidebarSearch .tt-dropdown-menu h3 {
@@ -1030,12 +1034,11 @@ border: 1px solid black;
 
 
 .sidebarSearch .tt-suggestion {
-background: rgba(0,0,0,0.5);
-border: 1px solid black;
+  background: #2A343C;
 }
 
 .sidebarSearch .tt-is-under-cursor {
-  background:black;
+  background:#0E161D;
 }
 
 .sidebarSearch .tt-dataset-maps .tt-is-under-cursor .resultmap, .sidebarSearch .tt-dataset-topics .tt-is-under-cursor .resulttopic {
@@ -1082,24 +1085,25 @@ border: 1px solid black;
 }
 
 .sidebarSearch .resultText {
-  width: 240px;
+  width: 250px;
   display: block;
   float: left;
 }
 
 .sidebarSearch .resultTitle {
-  font-weight:bold;
-  font-size:20px;
+  font-weight:normal;
+  font-family: 'LatoRegular';
+  font-size:18px;
   line-height:22px;
   width:100%;
   padding-top:8px;
 }
 .sidebarSearch .resultDesc {
-  font-style:italic;
-  font-size:16px;
+  font-family: 'LatoItalic';
+  font-size:14px;
   line-height:16px;
   width:100%;
-  padding: 6px 0;
+  padding: 3px 0 6px 0;
 }
 
 .sidebarSearch .tip {
@@ -1200,10 +1204,9 @@ line-height: 20px;
  white-space: nowrap;
  border-radius: 4px;
  font-size:15px !important;
- font-family:'LatoLight';
+ font-family:'LatoRegular';
  line-height:17px;
  padding: 3px 5px 2px;
- border: 1px solid black;
  z-index:100;
 }
 .sidebarSearch .mapCount .tip,.sidebarSearch .synapseCount .tip, .sidebarSearch .topicCount .tip  {
@@ -1295,13 +1298,13 @@ left: 13px;
  color: black;
 }
 
-.rightclickmenu > ul {
+.rightclickmenu ul {
   padding: 2px;
 }
 
 .rightclickmenu ul li {
  list-style: none;
-padding: 3px 45px 3px 30px;
+padding: 3px 10px 3px 30px;
 font-family: arial, sans-serif;
 font-size: 17px;
 line-height: 17px;
@@ -1309,8 +1312,14 @@ background-repeat: no-repeat;
 background-size: 20px 20px;
 background-position: 5px 2px;
 }
+.rightclickmenu ul li:nth-child(odd){ 
+		background-color: #FFF;
+}
+.rightclickmenu ul li:nth-child(even){ 
+		background-color: #EEE;
+}
 .rightclickmenu ul li:hover {
- background-color: #e4e4e4;
+ background-color: #BBB;
  background-position: 7px 2px;
  cursor:pointer;
 }
@@ -1323,8 +1332,38 @@ background-position: 5px 2px;
 .rightclickmenu .rc-hide {
   background-image: url(MMCCicon_hide.png);
 }
+.rightclickmenu .rc-center {
+  background-image: url(MMCCicon_center.png);
+}
 .rightclickmenu .rc-popout {
   background-image: url(MMCCicon_pop-out_black.png);
+}
+.rightclickmenu .rc-permission {
+  background-image: url(MMCCicon_edit_permission_black.png);
+  position:relative;
+}
+
+.rightclickmenu .rc-permission ul {
+  display:none;
+  background:white;
+  top: 0;
+  left:100%;
+  position:absolute;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.rightclickmenu .rc-permission:hover ul {
+  display:block;
+}
+.rightclickmenu .rc-permission .toCommons {
+  background-image: url(MMCCicon_commons.png);
+}
+.rightclickmenu .rc-permission .toPublic {
+  background-image: url(MMCCicon_public.png);
+}
+.rightclickmenu .rc-permission .toPrivate {
+  background-image: url(MMCCicon_private.png);
 }
 
 .rightclickmenu p {
@@ -1336,13 +1375,13 @@ background-position: 5px 2px;
 /* topic autocomplete */
 
 #new_topic .tt-suggestion.tt-is-under-cursor {
-background: black;
+background: #0E161D;
 }
 
 #new_topic .tt-suggestion {
 padding: 5px;
 font-family: 'LatoLight';
-background:#0F1519;
+background: #2A343C;
 }
 
 #new_topic .autocompleteSection {
@@ -1392,11 +1431,10 @@ background:#0F1519;
  color: black;
  white-space: nowrap;
  border-radius: 4px;
- font-size:13px !important;
- font-family:'LatoLight';
- line-height:14px;
+ font-size:15px !important;
+ font-family:'LatoRegular';
+ line-height:15px;
  padding: 2px 5px 2px;
- border: 1px solid black;
  z-index:100;
 }
 
@@ -1404,7 +1442,7 @@ background:#0F1519;
 
 #new_synapse .tt-dropdown-menu {
   width: 212px;
-  background:#0F1519;
+  background:#2A343C;
 }
 
 #new_synapse .tt-dropdown-menu h3 {
@@ -1417,7 +1455,7 @@ margin: 3px;
 }
 
 #new_synapse .tt-suggestion.tt-is-under-cursor {
-  background: black;
+  background: #0E161D;
 }
 
 #new_synapse .tt-suggestion {
@@ -1471,11 +1509,10 @@ margin: 3px;
  color: black;
  white-space: nowrap;
  border-radius: 4px;
- font-size:13px !important;
- font-family:'LatoLight';
- line-height:14px;
+ font-size:15px !important;
+ font-family:'LatoRegular';
+ line-height:15px;
  padding: 2px 5px 2px;
- border: 1px solid black;
  z-index:100;
 }
 
@@ -1536,23 +1573,28 @@ background-position: 16px 6px;
 background-size: 27px 27px;
 position:relative;
 }
-.mapContributors .tip {
+.infoStatIcon .tip {
 display: none; 
 position: absolute;
 background: white;
 min-width: 180px;
 max-width:250px;
 text-align:center;
-top: 38px;
-left: 6px;
 color: black;
 border-radius: 4px;
 font-size: 15px !important;
-font-family: 'LatoLight';
+font-family: 'LatoRegular';
 line-height: 17px;
 padding: 3px 5px 2px;
-border: 1px solid black;
 z-index: 100;
+}
+.mapContributors .tip {
+  top: 38px;
+  left: 6px;
+}
+.mapInfoBox .mapPermission .tip {
+  top: 0;
+  right: 32px;
 }
 .mapInfoBox .hoverForTip:hover .tip {
   display:block;
@@ -1568,18 +1610,64 @@ background-image: url(MMCCicon_synapse.png);
 background-position: 18px 6px;
 background-size: 27px 27px;
 }
-.mapPermission {
-background-position: 10px center;
+.mapInfoBox .mapPermission {
+background-position: 0 center;
 background-size: 30px 30px;
+width: 30px;
+height: 30px;
+padding: 0;
+margin: 5px 30px 5px 10px;
+position: relative;
 }
-.mapPermission.commons {
+.mapInfoBox .mapPermission.commons {
   background-image:url(MMCCicon_commons.png);
 }
-.mapPermission.public {
+.mapInfoBox .mapPermission.public {
   background-image:url(MMCCicon_public.png);
 }
-.mapPermission.private {
+.mapInfoBox .mapPermission.private {
   background-image:url(MMCCicon_private.png);
+}
+
+.yourMap .mapPermission:hover {
+  background-image: url(/assets/MMCCicon_maximize_arrow.png);
+  cursor:pointer;
+}
+.yourMap .mapPermission.minimize {
+ background-image: url(MMCCicon_minimize_arrow.png) !important;
+ cursor: pointer;
+}
+.mapInfoBox .mapPermission .permissionSelect {
+  list-style: none;
+  width: 30px;
+  height: 60px;
+  position: relative;
+  top: 30px;
+}
+.mapInfoBox .mapPermission .permissionSelect li {
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 30px 30px;
+}
+.mapInfoBox .mapPermission .permissionSelect .commons {
+  background-image: url(MMCCicon_commons.png);
+}
+.mapInfoBox .mapPermission .permissionSelect .public {
+  background-image: url(MMCCicon_public.png);
+}
+.mapInfoBox .mapPermission .permissionSelect .private {
+  background-image: url(MMCCicon_private.png);
+}
+.mapInfoBox .mapPermission .permissionSelect .commons:hover {
+  background-image: url(MMCCicon_commons_black.png);
+}
+.mapInfoBox .mapPermission .permissionSelect .public:hover {
+  background-image: url(MMCCicon_public_black.png);
+}
+.mapInfoBox .mapPermission .permissionSelect .private:hover {
+  background-image: url(MMCCicon_private_black.png);
 }
 
 .mapInfoBox .mapInfoDesc {
@@ -1660,7 +1748,7 @@ border: solid 2px #000;
 }
 
 #lightbox_content {
-  background: white;
+  background: white url(metacode-watermark.png) 443px -30px no-repeat;
   padding: 20px;
   border-radius:5px;
 }
@@ -1839,18 +1927,18 @@ font-family:arial;
 .new_map .tip {
   display:none;
    position: absolute;
- background: white;
+ background: black;
  width: 150px;
  top: 85px;
- left: -32px;
- color: black;
+ left: -29px;
+ color: white;
  border-radius: 4px;
  font-size:15px !important;
- font-family:'LatoLight';
+ font-family:'LatoRegular';
  line-height:17px;
  padding: 3px 5px 2px;
- border: 1px solid black;
  z-index:100;
+ text-align:center;
 }
 .new_map .hoverForTip:hover .tip {
   display:block;
@@ -2102,7 +2190,6 @@ div#preloaded-images {
 .home_content {
   width: 830px;
   margin:0 auto;
-  color:black;
 }
 
 span.blue {
@@ -2127,7 +2214,7 @@ text-align:center;
 }
 .home_content .request, .home_content .learnmore {
 margin: 5px auto;
-background: #AEA9FD;
+background: white;
 height: 40px;
 font-family: 'Vinyl';
 font-size: 18px;
@@ -2141,7 +2228,7 @@ font-weight: normal;
 text-transform: uppercase;
 }
 .home_content .request:hover, .home_content .learnmore:hover {
-background: #AEA9FD;
+background: white;
 -webkit-box-shadow: none;
 box-shadow: none;
 }
@@ -2268,13 +2355,13 @@ border-radius:5px;
   background-size:30px 30px;
 }
 .socialIcons .twitter {
-  background-image: url('MM Social-51.png');
+  background-image: url('MMSocial-51.png');
 }
 .socialIcons .google {
-  background-image: url('MM Social-52.png');
+  background-image: url('MMSocial-52.png');
 }
 .socialIcons .wordpress {
-  background-image: url('MM Social-53.png');
+  background-image: url('MMSocial-53.png');
 }
 
 

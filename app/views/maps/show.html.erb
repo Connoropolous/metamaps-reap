@@ -15,25 +15,27 @@
         <div class="sidebarSaveBox"></div>
       </div>
   <% end %>
-<div class="sidebarFork">
-  <div class="sidebarForkIcon hoverForTip">
-    <div class="tip">Save To New Map</div>
+  <div class="sidebarFork">
+    <div class="sidebarForkIcon hoverForTip">
+      <div class="tip">Save To New Map</div>
+    </div>
+    <div class="sidebarForkBox"></div>
   </div>
-  <div class="sidebarForkBox"></div>
-</div>
-<div class="sidebarCollaborate">
-  <div class="sidebarCollaborateIcon hoverForTip">
-    <div class="tip">Start Realtime Collaboration</div>
-  </div>
-  <div class="sidebarCollaborateBox">
-    
-  </div>
-</div>
+  <% if @map.permission == "commons" || @map.user == user %>
+    <div class="sidebarCollaborate">
+      <div class="sidebarCollaborateIcon hoverForTip">
+        <div class="tip">Start Realtime Collaboration</div>
+      </div>
+      <div class="sidebarCollaborateBox">
+        
+      </div>
+    </div>
+  <% end %>
 <% end %>
 <div class="sidebarFilter <%= authenticated? ? 'loggedin' : 'loggedout' %>">
   <div class="sidebarFilterIcon"></div>
   <div class="sidebarFilterBox">
-    <h3 class="filterByMetacode">Filter By Type</h3><span class="showAll">all</span><span class="hideAll">none</span>
+    <h3 class="filterByMetacode">Filter By Metacode</h3><span class="showAll">all</span><span class="hideAll">none</span>
     <div class="clearfloat"></div>
     <%= render :partial => 'main/filterbymetacode' %>
   </div>
@@ -57,8 +59,10 @@
 <div class="clearfloat"></div>
 
 <% if authenticated? %>
-  <%= render :partial => 'newtopic' %>
-  <%= render :partial => 'newsynapse' %>
+  <% if @map.permission == "commons" || @map.user == user %>
+    <%= render :partial => 'newtopic' %>
+    <%= render :partial => 'newsynapse' %>
+  <% end %>
   <%= render :partial => 'main/metacodeoptions' %>
   
   <% # for saving layouts %>
@@ -175,6 +179,40 @@
    // initialize best_in_place editing
    $('.authenticated div.permission.canEdit .best_in_place').best_in_place();
    
+   <% if @map.user == user %>
+     // ability to change permission
+    var selectingPermission = false;
+     $('.yourMap .mapPermission').click(function() {
+      if (!selectingPermission) {  
+        selectingPermission = true;
+        $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
+        if ( $(this).hasClass('commons') ) {
+          $(this).append('<ul class="permissionSelect"><li class="public"></li><li class="private"></li></ul>');
+        } else if ( $(this).hasClass('public') ) {
+          $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="private"></li></ul>');
+        } else if ( $(this).hasClass('private') ) {
+          $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="public"></li></ul>');
+        }
+        $('.mapPermission .permissionSelect li').click(function(event) {
+          selectingPermission = false;
+          var permission = $(this).attr('class');
+          updateMapPermission(mapid, permission);
+          event.stopPropagation();
+        });
+      } else {
+        selectingPermission = false;
+        $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
+        $('.mapPermission .permissionSelect').remove();
+      }
+     });
+    <% end %>
+   
+   //bind best_in_place ajax callbacks
+    $('.mapInfoName .best_in_place_name').bind("ajax:success", function() {
+      var name = $(this).html();
+      $('.mapName').html(name);
+    });
+   
    $('.showcard').draggable({ handle: ".metacodeImage" });
    $('#showcard').resizable({
      maxHeight: 500,
@@ -216,8 +254,8 @@
 				initialize("chaotic", true);
 		});
 	}
-  //window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');
-  window.realtime.socket = io.connect('http://metamaps.cc:5001');
+  
+  window.realtime.socket = io.connect('http://floating-harbor-5543.herokuapp.com');
   window.realtime.socket.on('connect', function() {
       subscribeToRooms();
       console.log('socket connected');

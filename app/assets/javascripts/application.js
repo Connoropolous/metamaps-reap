@@ -26,7 +26,7 @@
 // other options are 'graph'
 var viewMode = "list";
 
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null, mapperm = false, touchPos, touchDragNode, mouseIsDown = false;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, goRealtime = false, mapid = null, mapperm = false, touchPos, touchDragNode, mouseIsDown = false;
 
  $(document).ready(function() {
   
@@ -297,7 +297,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                 s.css({'height':'auto','border-top':'none','overflow':'visible'});
                 $(this).removeClass('maximizeResults').addClass('minimizeResults');
               } else {
-                s.css({'height':'0','border-top':'1px solid #222','overflow':'hidden'});
+                s.css({'height':'0','border-top':'1px solid rgb(56, 56, 56)','overflow':'hidden'});
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');
               }
             });
@@ -308,7 +308,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                 s.css({'height':'auto','border-top':'none','overflow':'visible'});
                 $(this).removeClass('maximizeResults').addClass('minimizeResults');
               } else {
-                s.css({'height':'0','border-top':'1px solid #222','overflow':'hidden'});
+                s.css({'height':'0','border-top':'1px solid rgb(56, 56, 56)','overflow':'hidden'});
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');
               }
             });
@@ -712,6 +712,41 @@ function updateTopicPermission(node, permission) {
       $('.showcard .mapPerm').removeClass('co pu pr minimize').addClass( permission.substring(0,2) );
       $('.permissionSelect').remove();
       node.setData("permission", permission);
+    },
+    error: function(){
+      alert('failed to update permission');
+    }
+  });
+}
+
+function updateSynapsePermission(edge, permission) {
+  var mdata = { "synapse": { "permission": permission } };
+  $.ajax({
+    type: "PUT",
+    dataType: 'json',
+    url: "/synapses/" + edge.data.$id,
+    data: mdata,
+    success: function(data) {
+      $('#edit_synapse .mapPerm').removeClass('co pu pr minimize').addClass( permission.substring(0,2) );
+      $('#edit_synapse .permissionSelect').remove();
+      edge.setData("permission", permission);
+    },
+    error: function(){
+      alert('failed to update permission');
+    }
+  });
+}
+
+function updateMapPermission(mapid, permission) {
+  var mdata = { "map": { "permission": permission } };
+  $.ajax({
+    type: "PUT",
+    dataType: 'json',
+    url: "/maps/" + mapid,
+    data: mdata,
+    success: function(data) {
+      $('.mapPermission').removeClass('commons public private minimize').addClass( permission );
+      $('.mapPermission .permissionSelect').remove();
     },
     error: function(){
       alert('failed to update permission');

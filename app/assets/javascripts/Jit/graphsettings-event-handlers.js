@@ -1,11 +1,16 @@
 function selectEdgeOnClickHandler(adj, e) {
   if (Mconsole.busy) return;
   
+  // catch right click on mac, which is often like ctrl+click
+  if (navigator.platform.indexOf("Mac")!=-1 && e.ctrlKey) {
+    selectEdgeOnRightClickHandler(adj, e)
+    return;
+  }
+  
   if (synapseWasDoubleClicked()) {
     synapseDoubleClickHandler(adj, e);
     return;
   }
-
 
   var edgeIsSelected = MetamapsModel.selectedEdges.indexOf(adj);
   if (edgeIsSelected == -1) edgeIsSelected = false;
@@ -50,8 +55,16 @@ function selectEdgeOnRightClickHandler(adj, e) {
     var menustring = '<ul>';
     
     if (userid != null) menustring += '<li class="rc-delete">Delete</li>';
-    if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from Map</li>';
+    if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from map</li>';
     menustring += '<li class="rc-hide">Hide until refresh</li>';
+    if (userid) {
+      var options = '<ul><li class="changeP toCommons">commons</li> \
+                         <li class="changeP toPublic">public</li> \
+                         <li class="changeP toPrivate">private</li> \
+                     </ul>';
+      
+      menustring += '<li class="rc-permission">Change permissions' + options + '</li>';
+    }
     
     menustring += '</ul>';
     rightclickmenu.innerHTML = menustring;
@@ -95,6 +108,13 @@ function selectEdgeOnRightClickHandler(adj, e) {
       $('.rightclickmenu').remove();
       hideSelectedEdges();
       hideSelectedNodes();
+    });
+    
+    // change the permission of all the selected nodes and synapses that you were the originator of
+    $('.rc-permission li').click(function() {
+      $('.rightclickmenu').remove();
+      // $(this).text() will be 'commons' 'public' or 'private'
+      updateSelectedPermissions( $(this).text() );
     });
       
   } //selectEdgeOnRightClickHandler
@@ -178,6 +198,12 @@ function nodeWasDoubleClicked() {
 
 function selectNodeOnClickHandler(node, e) {
   if (Mconsole.busy) return;
+  
+  // catch right click on mac, which is often like ctrl+click
+  if (navigator.platform.indexOf("Mac")!=-1 && e.ctrlKey) {
+    selectNodeOnRightClickHandler(node, e)
+    return;
+  }
 
   var check = nodeWasDoubleClicked();
   if (check) {
@@ -231,11 +257,19 @@ function selectNodeOnClickHandler(node, e) {
     var menustring = '<ul>';
     
     if (userid != null) menustring += '<li class="rc-delete">Delete</li>';
-    if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from Map</li>';
+    if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from map</li>';
     menustring += '<li class="rc-hide">Hide until refresh</li>';
     
-    if (!mapid) menustring += '<li class="rc-center">Center This Topic</li>';
-    menustring += '<li class="rc-popout">Open In New Tab</li>';
+    if (!mapid) menustring += '<li class="rc-center">Center this topic</li>';
+    menustring += '<li class="rc-popout">Open in new tab</li>';
+    if (userid) {
+      var options = '<ul><li class="changeP toCommons">commons</li> \
+                         <li class="changeP toPublic">public</li> \
+                         <li class="changeP toPrivate">private</li> \
+                     </ul>';
+      
+      menustring += '<li class="rc-permission">Change permissions' + options + '</li>';
+    }
     
     menustring += '</ul>';
     rightclickmenu.innerHTML = menustring;
@@ -293,40 +327,52 @@ function selectNodeOnClickHandler(node, e) {
       var win=window.open('/topics/' + node.id, '_blank');
       win.focus();
     });
+    
+    // change the permission of all the selected nodes and synapses that you were the originator of
+    $('.rc-permission li').click(function() {
+      $('.rightclickmenu').remove();
+      // $(this).text() will be 'commons' 'public' or 'private'
+      updateSelectedPermissions( $(this).text() );
+    });
       
   } //selectNodeOnRightClickHandler
 
 function canvasDoubleClickHandler(canvasLoc,e) { 
+
    //grab the location and timestamp of the click 
    var storedTime = MetamapsModel.lastCanvasClick;
    var now = Date.now(); //not compatible with IE8 FYI 
    MetamapsModel.lastCanvasClick = now;
  
-   if (now - storedTime < MetamapsModel.DOUBLE_CLICK_TOLERANCE) { 
-      //pop up node creation :) 
-      $('#topic_grabTopic').val("null"); 
-      $('#topic_addSynapse').val("false"); 
-      $('#new_topic').css('left', e.clientX + "px"); 
-      $('#new_topic').css('top', e.clientY + "px"); 
-      $('#topic_x').val(canvasLoc.x); 
-      $('#topic_y').val(canvasLoc.y);      
-      $('#new_topic').fadeIn('fast');
-      $('#topic_name').focus(); 
-   } else { 
+   // if on a public map, disable topic creation
+   if (userid && (mapperm || !mapid) ) {
+     if (now - storedTime < MetamapsModel.DOUBLE_CLICK_TOLERANCE) {  
+        //pop up node creation :) 
+        $('#topic_grabTopic').val("null"); 
+        $('#topic_addSynapse').val("false"); 
+        $('#new_topic').css('left', e.clientX + "px"); 
+        $('#new_topic').css('top', e.clientY + "px"); 
+        $('#topic_x').val(canvasLoc.x); 
+        $('#topic_y').val(canvasLoc.y);      
+        $('#new_topic').fadeIn('fast');
+        $('#topic_name').typeahead('setQuery','').focus(); 
+        return;
+     }
+    }
+    
+    if (!MetamapsModel.didPan) {
       $('#new_topic').fadeOut('fast'); 
       $('#new_synapse').fadeOut('fast'); 
+      $('.rightclickmenu').remove();
       // reset the draw synapse positions to false
       MetamapsModel.synapseStartCoord = false;
       MetamapsModel.synapseEndCoord = false;
-      // set all node dimensions back to normal
-       Mconsole.graph.eachNode(function (n) {
-          n.setData('dim', 25, 'current');
-       });
+      deselectAllNodes();
       tempInit = false; 
       tempNode = null; 
       tempNode2 = null; 
       Mconsole.plot(); 
-   } 
+    }
 }//canvasDoubleClickHandler 
 
 function handleSelectionBeforeDragging(node, e) {
@@ -418,6 +464,10 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
        }
        // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
        else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && userid != null) {
+       
+           // if on a public map, disable synapse creation
+           if (mapid && !mapperm) return;
+       
            if (tempInit == false) {
               tempNode = node;
               tempInit = true;
@@ -532,4 +582,46 @@ function touchPanZoomHandler(eventInfo, e) {
             lastDist = dist;
     }
     
+}
+
+function updateSelectedPermissions(permission) {
+  
+  
+  if ( $('.notice.metamaps').length == 0 ) {
+    $('body').prepend('<div class="notice metamaps" />');
+  }
+  $('.notice.metamaps').hide().html('Working...').fadeIn('fast');
+  
+  // variables to keep track of how many nodes and synapses you had the ability to change the permission of
+  var nCount = 0, sCount = 0;
+  
+  // change the permission of the selected synapses, if logged in user is the original creator
+  var l = MetamapsModel.selectedEdges.length;
+  for (var i = l-1; i >= 0; i -= 1) {
+    var edge = MetamapsModel.selectedEdges[i];
+    
+    if (edge.getData('userid') == userid) {
+      updateSynapsePermission(edge,permission);
+      sCount++;
+    }
+  }
+  
+  // change the permission of the selected topics, if logged in user is the original creator
+  var l = MetamapsModel.selectedNodes.length;
+  for (var i = l-1; i >= 0; i -= 1) {
+    var node = MetamapsModel.selectedNodes[i];
+    
+    if (node.getData('userid') == userid) {
+      updateTopicPermission(node,permission);
+      nCount++;
+    }
+  }
+  
+  var nString = nCount == 1 ? (nCount.toString() + ' topic and ') : (nCount.toString() + ' topics and ');
+  var sString = sCount == 1 ? (sCount.toString() + ' synapse') : (sCount.toString() + ' synapses');
+  
+  $('.notice.metamaps').html(nString + sString + ' you created updated to ' + permission)
+  setTimeout( function() {
+    $('.notice.metamaps').fadeOut('fast');
+  }, 8000);
 }
