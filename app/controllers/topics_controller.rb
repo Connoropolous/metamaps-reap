@@ -64,7 +64,7 @@ class TopicsController < ApplicationController
     else
       @topic = Topic.new()
       @topic.name = params[:topic][:name]
-      @topic.desc = ""
+      @topic.desc = params[:topic][:desc] ? params[:topic][:desc] : ""
       @topic.link = ""
       @topic.permission = 'commons'
       @topic.metacode = Metacode.find_by_name(params[:topic][:metacode])
@@ -112,6 +112,7 @@ class TopicsController < ApplicationController
     respond_to do |format|
       format.html { respond_with(@user, location: topic_url(@topic)) }
       format.js { respond_with(@topic, @mapping, @synapse, @position) }
+      format.mobile { render :json => @topic.self_as_json }
     end
   end
   

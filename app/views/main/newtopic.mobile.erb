@@ -21,7 +21,7 @@
         <label for="type">Type</label>
         <select id="type">
           <% Metacode.all.each do |m| %>
-          <option value="<%= m.id.to_s %>"><%= m.name %></option>
+          <option value="<%= m.name %>"><%= m.name %></option>
           <% end %>
         </select>
       </div>
@@ -42,4 +42,3 @@
     </form>
   </div>
 </div>
-

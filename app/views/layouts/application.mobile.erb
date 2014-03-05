@@ -11,6 +11,7 @@
   <title><%=h yield(:title) + "" %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script type="text/javascript">
+    var mapid = false;
   <% if authenticated? %>
     var userid = <%= user.id %>;
     var username = "<%= user.name %>";
@@ -44,8 +45,8 @@
             <% if authenticated? %>
             <div data-role="navbar" class="nav-veqtor">  
               <ul>  
-                <li><a href="/maps/mappers/<%= user.id %>" data-icon="Map">My Maps</a></li>
-                <li><a href="/newtopic" id="createNewEntity" data-icon="Add" data-transition="slideup" data-prefetch="true">New Topic</a></li>
+                <li><a href="/maps/mappers/<%= user.id %>" onclick="mapid = false;" data-icon="Map">My Maps</a></li>
+                <li><a href="/newtopic" id="createNewEntity" onclick="pickMap()" data-icon="Add" data-transition="slideup" data-prefetch="true">New Topic</a></li>
                 <li><a href="/sign_out" data-icon="Lock">Logout</a></li>
               </ul>  
             </div>
@@ -59,60 +60,64 @@
     
 <% if authenticated? %>
 <script>
+
+function pickMap() {
+  if (mapid) {
+    $("#addToMaps option[value='" + mapid + "']").attr("selected", "selected");
+    $("#addToMaps").selectmenu("refresh");
+  }
+}
+
 $('#new-entity').live('pagecreate',function(){
-// create Entity
-function createE(callback, args) {
-    return $.post("/entities.json", (function (data) { 
-      args.unshift(data);
-      callback.apply(null, args); 
-    }));
-}
 
-// create Field
-function createF(EntityFieldSynapse, efsID, keyID, value) {
-        var data, metadata;
+    var addToMaps = []; 
+     
+    // create Topic
+    function createTopic(name, metacode, description) {
+      return $.ajax({
+          type: "POST",
+          url: "/topics",
+          dataType: "json",
+          data: { "topic": { "name": name, "desc": description, "metacode": metacode, "x": 0, "y":0, "grabTopic": "null" } },
+          success: (function (data, textStatus, jqXHR) {
+              // reset the form and change the button back to say "Submit"
+              $('#new-entity form')[0].reset();
+              $('#new-entity').find('.addIt .ui-btn-text').text("Created!");
+              setTimeout(function(){
+                $('#new-entity').find('.addIt .ui-btn-text').text("Create!");
+                
+                var prev = $.mobile.urlHistory.getPrev();
+                
+                if (prev != undefined) {
+                  if (prev.url.indexOf('maps') != -1 && prev.url.indexOf('maps/mappers') == -1 ) {  
+                    $.mobile.changePage(prev.url, { transition: 'slidedown' });
+                  } else {
+                    $.mobile.changePage( '/topics/' + data.id, { transition: 'slidedown' });
+                  }
+                } else {
+                  $.mobile.changePage( '/maps/mappers/' + userid.toString(), { transition: 'slidedown' });
+                }
+              }, 1000);
+              
+              for (var i = 0; i < addToMaps.length; i++) {
+                createMapping( data.id, parseInt(addToMaps[i]) );
+              }
+          })
+      });
+    } 
+    
+    // create Mapping
+    function createMapping(topicid, mapid) {
+      return $.ajax({
+          type: "POST",
+          url: "/mappings",
+          dataType: "json",
+          data: { "xloc": 0, "yloc": 0, "topic": { "id": topicid }, "map": { "id": mapid }  },
+          success: (function (data, textStatus, jqXHR) {
 
-        data = {};
-        metadata = {};
-        if (EntityFieldSynapse === "entity") {
-            metadata["entity_id"] = efsID;
-        } else if (EntityFieldSynapse === "field") {
-            metadata["field_id"] = efsID;
-        } else if (EntityFieldSynapse === "synapse") {
-            metadata["synapse_id"] = efsID;
-        }
-        metadata["key_id"] = keyID;
-        metadata["value"] = value;
-        data["field"] = metadata;
-        return $.ajax({
-            type: "POST",
-            url: "/fields.json",
-            data: data,
-            success: (function (data, textStatus, jqXHR) {
-            }),
-            async: false
-        });
-} 
-
-// create Synapse
-function createS(entity1_id, relationID, entity2_id) {
-        var data, metadata;
-
-        data = {};
-        metadata = {};
-        metadata["entity1_id"] = entity1_id;
-        metadata["relation_id"] = relationID;
-        metadata["entity2_id"] = entity2_id;
-        data["synapse"] = metadata;
-        return $.ajax({
-            type: "POST",
-            url: "/synapses.json",
-            data: data,
-            success: (function (data, textStatus, jqXHR) {
-            }),
-            async: false
-        });
-}
+          })
+      });
+    }
     
     // add events to the back and submit buttons
     // this is the back button
@@ -134,39 +139,18 @@ function createS(entity1_id, relationID, entity2_id) {
         evt.stopPropagation();
         
         if ($('#title').val() == "" || $('#type option:selected').length == 0) {
-          alert('Please enter at least a title and select one type');
+          alert('Please enter a title and select a type');
           return;
         }
         // change the button to a loading image
         $('#new-entity').find('.addIt .ui-btn-text').html('<img src="/assets/loading.gif" />');
-        function addMetadata(e){
-          // add the 'expressed In English' field
-          createF("entity",e.id, 1, $('#title').val());
-          // add the 'type' synapses
-          $('#type option:selected').each(function() {
-            createS(e.id, 2, $(this).val());
-          });
-          // add the 'Description' field
-          createF("entity",e.id, 20, $('#description').val());
-          // add the 'appears as topic on map' synapses
-          $('#addToMaps option:selected').each(function() {
-            createS(e.id, 14, $(this).val());
-          });
-          
-          // reset the form and change the button back to say "Submit"
-          $('#new-entity form')[0].reset();
-          $('#new-entity').find('.addIt .ui-btn-text').text("Created!");
-          setTimeout(function(){
-            $('#new-entity').find('.addIt .ui-btn-text').text("Create!");
-            if ($.mobile.urlHistory.getPrev() != undefined) {
-              $.mobile.changePage($.mobile.urlHistory.getPrev().url, { transition: 'slidedown' });
-            } else {
-              $.mobile.changePage( '/dashboard', { transition: 'slidedown' });
-            }
-          }, 1000);
-        }
-        // call create entity which will run 'addMetadata' when it works
-        createE(addMetadata, []);
+        
+        $('#addToMaps option:selected').each(function() {
+          addToMaps.push( $(this).val() );
+        });
+        
+        // addit!
+        createTopic( $('#title').val() , $('#type option:selected').val() , $('#description').val() )
     }); // end $('.addIt').click
 });
 </script>
